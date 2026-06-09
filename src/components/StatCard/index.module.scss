@@ -1,0 +1,89 @@
+@use '@/styles/variables.scss' as *;
+
+.statCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  overflow: hidden;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8rpx;
+    height: 100%;
+    background: $color-primary;
+  }
+
+  &.colorPrimary::before {
+    background: $color-primary;
+  }
+
+  &.colorSuccess::before {
+    background: $color-success;
+  }
+
+  &.colorWarning::before {
+    background: $color-warning;
+  }
+
+  &.colorError::before {
+    background: $color-error;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.title {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-normal;
+}
+
+.growth {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.growthUp {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.growthDown {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}
+
+.cardBody {
+  display: flex;
+  align-items: baseline;
+}
+
+.value {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: 1.2;
+}
+
+.unit {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-left: $spacing-xs;
+}

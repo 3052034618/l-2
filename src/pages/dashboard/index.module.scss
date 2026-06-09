@@ -1,0 +1,271 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #e8f0ff 0%, $color-bg-page 400rpx);
+  padding-bottom: 120rpx;
+}
+
+.header {
+  padding: $spacing-lg $page-padding $spacing-xl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.storeInfo {
+  flex: 1;
+}
+
+.storeName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+}
+
+.storeDate {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  @include flex-center;
+  font-size: $font-size-lg;
+  box-shadow: $shadow-card;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-xl;
+}
+
+.salesCard {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  color: $color-text-white;
+  box-shadow: 0 8rpx 32rpx rgba(22, 93, 255, 0.25);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60rpx;
+    right: -60rpx;
+    width: 200rpx;
+    height: 200rpx;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -40rpx;
+    left: 50%;
+    width: 160rpx;
+    height: 160rpx;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+  }
+}
+
+.salesLabel {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.salesValue {
+  font-size: 64rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  display: block;
+}
+
+.salesUnit {
+  font-size: $font-size-md;
+  opacity: 0.8;
+  margin-left: $spacing-xs;
+}
+
+.salesGrowth {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8rpx 20rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  margin-top: $spacing-md;
+
+  &.up {
+    background: rgba(0, 180, 42, 0.3);
+  }
+
+  &.down {
+    background: rgba(245, 63, 63, 0.3);
+  }
+}
+
+.quickActions {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: 0 $page-padding $spacing-xl;
+  padding: $spacing-lg 0;
+  box-shadow: $shadow-card;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.actionItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm 0;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.actionIcon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: $radius-lg;
+  @include flex-center;
+  font-size: 40rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.actionName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.section {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: 0 $page-padding $spacing-xl;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40rpx;
+  height: 40rpx;
+  padding: 0 12rpx;
+  background: $color-error;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  border-radius: $radius-round;
+  margin-left: $spacing-sm;
+}
+
+.warningBadge {
+  background: $color-warning;
+}
+
+.productList {
+  max-height: 600rpx;
+}
+
+.chartSection {
+  margin-top: $spacing-md;
+}
+
+.chartTitle {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+}
+
+.chartContainer {
+  height: 300rpx;
+  position: relative;
+}
+
+.chartBars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 240rpx;
+  padding-bottom: $spacing-md;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.chartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 8rpx;
+}
+
+.bar {
+  width: 100%;
+  max-width: 48rpx;
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xs $radius-xs 0 0;
+  min-height: 8rpx;
+  transition: height $transition-base;
+}
+
+.barLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+}
+
+.chartLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-sm;
+}
+
+.emptyText {
+  text-align: center;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+  padding: $spacing-xl 0;
+}

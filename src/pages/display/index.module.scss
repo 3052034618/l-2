@@ -1,0 +1,302 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.headerCard {
+  margin: $spacing-lg $page-padding;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  color: $color-text-white;
+  box-shadow: 0 8rpx 32rpx rgba(22, 93, 255, 0.25);
+}
+
+.headerTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  display: block;
+}
+
+.headerDesc {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+.headerStats {
+  display: flex;
+  margin-top: $spacing-lg;
+}
+
+.headerStat {
+  flex: 1;
+  text-align: center;
+
+  &:not(:last-child) {
+    border-right: 1rpx solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.statNum {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  display: block;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  opacity: 0.8;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.section {
+  margin: 0 $page-padding $spacing-xl;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.shelfGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+}
+
+.shelfCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+  position: relative;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+.shelfIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-lg;
+  background: $color-primary-bg;
+  @include flex-center;
+  font-size: 36rpx;
+  margin-bottom: $spacing-md;
+}
+
+.shelfName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.shelfCategory {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.shelfStatus {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.checked {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.pending {
+    color: $color-text-tertiary;
+    background: $color-tag-bg;
+  }
+
+  &.abnormal {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}
+
+.checkSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.checkBox {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: $radius-sm;
+  border: 2rpx solid $color-border;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+  @include flex-center;
+  transition: all $transition-base;
+
+  &.checked {
+    background: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.checkIcon {
+  color: $color-text-white;
+  font-size: $font-size-sm;
+}
+
+.checkText {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+
+  &.required::after {
+    content: '*';
+    color: $color-error;
+    margin-left: 4rpx;
+  }
+}
+
+.recordList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.recordCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.recordHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.recordShelf {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.recordImages {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+
+  @include scroll-x-container;
+}
+
+.recordImg {
+  @include scroll-x-item(200rpx);
+  width: 200rpx;
+  height: 150rpx;
+  border-radius: $radius-md;
+  background: $color-bg-page;
+}
+
+.recordRemark {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  background: $color-bg-page;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+}
+
+.recordStatusBadge {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.normal {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.abnormal {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}
+
+.takePhotoBtn {
+  position: fixed;
+  bottom: 120rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 560rpx;
+  height: 96rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  @include flex-center;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(22, 93, 255, 0.35);
+  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: translateX(-50%) scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.btnIcon {
+  margin-right: $spacing-sm;
+  font-size: 36rpx;
+}

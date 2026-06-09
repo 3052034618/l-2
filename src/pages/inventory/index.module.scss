@@ -1,0 +1,308 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 180rpx;
+}
+
+.searchBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $color-bg-page;
+  padding: $spacing-md $page-padding;
+}
+
+.searchInput {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  padding: 0 $spacing-lg;
+  height: 72rpx;
+  box-shadow: $shadow-card;
+}
+
+.searchIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.searchText {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.scanBtn {
+  margin-left: $spacing-md;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  @include flex-center;
+  color: $color-text-white;
+  font-size: 36rpx;
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.95);
+  }
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 $page-spacing;
+  margin-bottom: $spacing-lg;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+  background: $color-bg-card;
+  margin: 0 $spacing-xs;
+  padding: $spacing-md;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  display: block;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+.warning .statValue {
+  color: $color-warning;
+}
+
+.danger .statValue {
+  color: $color-error;
+}
+
+.info .statValue {
+  color: $color-primary;
+}
+
+.tabs {
+  display: flex;
+  background: $color-bg-card;
+  margin: 0 $page-padding $spacing-md;
+  border-radius: $radius-lg;
+  padding: 8rpx;
+  box-shadow: $shadow-card;
+}
+
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-sm 0;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.productList {
+  padding: 0 $page-padding;
+}
+
+.productCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.99);
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+.productRow {
+  display: flex;
+  align-items: center;
+}
+
+.productImg {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.productInfo {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+}
+
+.productName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.productBarcode {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.productBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-sm;
+}
+
+.productPrice {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+}
+
+.stockInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.stockTag {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.normal {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.low {
+    color: $color-warning;
+    background: $color-warning-bg;
+  }
+
+  &.out {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}
+
+.salesInfo {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.bottomBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-sm 0;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.bottomBtnIcon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.bottomBtnText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.primaryBtn {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  border-radius: $radius-lg;
+  margin-left: $spacing-md;
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
+
+  .bottomBtnText {
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.categoryFilter {
+  display: flex;
+  padding: 0 $page-padding;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+  gap: $spacing-sm;
+
+  @include scroll-x-container;
+}
+
+.categoryItem {
+  @include scroll-x-item(auto);
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  box-shadow: $shadow-card;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,101 @@
+@use '@/styles/variables.scss' as *;
+
+.productItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.productImage {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.productInfo {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+}
+
+.productName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.productCategory {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+.productBottom {
+  display: flex;
+  align-items: center;
+  margin-top: $spacing-sm;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.productPrice {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+}
+
+.stockTag {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.normal {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.lowStock {
+    color: $color-warning;
+    background: $color-warning-bg;
+  }
+
+  &.outOfStock {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}
+
+.expiryTag {
+  font-size: $font-size-xs;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+
+  &.normal {
+    color: $color-text-secondary;
+    background: $color-tag-bg;
+  }
+
+  &.near {
+    color: $color-warning;
+    background: $color-warning-bg;
+  }
+
+  &.urgent {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+}

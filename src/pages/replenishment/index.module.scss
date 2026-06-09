@@ -1,0 +1,41 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding: $spacing-xl $page-padding;
+  @include flex-center;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 160rpx;
+  margin-bottom: $spacing-lg;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.desc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.backBtn {
+  margin-top: $spacing-xl;
+  padding: $spacing-sm $spacing-xl;
+  background: $color-primary;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
