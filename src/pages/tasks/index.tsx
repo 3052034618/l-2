@@ -3,13 +3,15 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import Taro, { usePullDownRefresh } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { taskList, messages } from '@/data/tasks';
+import { useTasksStore } from '@/store/tasks';
 import { getTaskTypeText, getTaskStatusText } from '@/utils';
 
 type TabType = 'tasks' | 'messages';
 type TaskFilterType = 'all' | 'pending' | 'in_progress' | 'completed';
 
 const TasksPage: React.FC = () => {
+  const { tasks, messages, markMessageRead, getPendingCount, getUnreadMessageCount } = useTasksStore();
+
   const [activeTab, setActiveTab] = useState<TabType>('tasks');
   const [taskFilter, setTaskFilter] = useState<TaskFilterType>('all');
   const [refreshing, setRefreshing] = useState(false);
@@ -23,13 +25,13 @@ const TasksPage: React.FC = () => {
     }, 1000);
   });
 
-  const unreadCount = messages.filter(m => !m.read).length;
-  const pendingTaskCount = taskList.filter(t => t.status !== 'completed').length;
+  const unreadCount = getUnreadMessageCount();
+  const pendingTaskCount = getPendingCount();
 
   const filteredTasks = useMemo(() => {
-    if (taskFilter === 'all') return taskList;
-    return taskList.filter(t => t.status === taskFilter);
-  }, [taskFilter]);
+    if (taskFilter === 'all') return tasks;
+    return tasks.filter(t => t.status === taskFilter);
+  }, [tasks, taskFilter]);
 
   const taskFilters = [
     { key: 'all', label: '全部' },
@@ -40,12 +42,15 @@ const TasksPage: React.FC = () => {
 
   const handleTaskClick = (taskId: string) => {
     console.log('[Tasks] 点击任务:', taskId);
-    Taro.showToast({ title: '任务详情', icon: 'none' });
+    Taro.navigateTo({
+      url: `/pages/task-detail/index?id=${taskId}`
+    });
   };
 
   const handleMessageClick = (msgId: string) => {
     console.log('[Tasks] 点击消息:', msgId);
-    Taro.showToast({ title: '消息详情', icon: 'none' });
+    markMessageRead(msgId);
+    Taro.showToast({ title: '已读', icon: 'none' });
   };
 
   const getTypeEmoji = (type: string) => {

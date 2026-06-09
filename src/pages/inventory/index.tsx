@@ -1,17 +1,25 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, Input, Image } from '@tarojs/components';
+import { View, Text, ScrollView, Input, Image, Button, Modal } from '@tarojs/components';
 import Taro, { usePullDownRefresh } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { inventoryList } from '@/data/inventory';
+import { useInventoryStore } from '@/store/inventory';
+import { Product } from '@/types';
 
 type TabType = 'all' | 'low' | 'out' | 'near';
 
 const InventoryPage: React.FC = () => {
+  const { products, getStats, updateStock } = useInventoryStore();
+
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [searchText, setSearchText] = useState('');
   const [activeCategory, setActiveCategory] = useState('全部');
   const [refreshing, setRefreshing] = useState(false);
+
+  const [showScanModal, setShowScanModal] = useState(false);
+  const [scanBarcode, setScanBarcode] = useState('');
+  const [matchedProduct, setMatchedProduct] = useState<Product | null>(null);
+  const [actualStock, setActualStock] = useState('');
 
   const categories = ['全部', '饮料', '休闲零食', '方便食品', '乳制品', '烘焙食品'];
 
@@ -22,16 +30,10 @@ const InventoryPage: React.FC = () => {
     { key: 'near', label: '临期' }
   ];
 
-  const stats = useMemo(() => {
-    const total = inventoryList.length;
-    const low = inventoryList.filter(p => p.stock > 0 && p.stock < p.minStock).length;
-    const out = inventoryList.filter(p => p.stock <= 0).length;
-    const near = inventoryList.filter(p => p.expireDate).length;
-    return { total, low, out, near };
-  }, []);
+  const stats = useMemo(() => getStats(), [products]);
 
   const filteredProducts = useMemo(() => {
-    let result = [...inventoryList];
+    let result = [...products];
 
     if (activeCategory !== '全部') {
       result = result.filter(p => p.category === activeCategory);
@@ -57,20 +59,53 @@ const InventoryPage: React.FC = () => {
     }
 
     return result;
-  }, [activeTab, searchText, activeCategory]);
+  }, [activeTab, searchText, activeCategory, products]);
 
   usePullDownRefresh(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
       Taro.stopPullDownRefresh();
-      Taro.showToast({ title: '刷新成功', icon: 'success' });
-    }, 1000);
+    }, 800);
   });
 
   const handleScan = () => {
-    console.log('[Inventory] 点击扫码');
-    Taro.showToast({ title: '扫码功能', icon: 'none' });
+    console.log('[Inventory] 打开扫码');
+    setShowScanModal(true);
+    setScanBarcode('');
+    setMatchedProduct(null);
+    setActualStock('');
+  };
+
+  const handleBarcodeInput = (value: string) => {
+    setScanBarcode(value);
+    const product = products.find(p => p.barcode === value);
+    if (product) {
+      setMatchedProduct(product);
+      setActualStock(String(product.stock));
+    } else {
+      setMatchedProduct(null);
+    }
+  };
+
+  const handleQuickScan = (barcode: string) => {
+    handleBarcodeInput(barcode);
+  };
+
+  const handleSaveStock = () => {
+    if (!matchedProduct) {
+      Taro.showToast({ title: '请先匹配商品', icon: 'none' });
+      return;
+    }
+    const stock = parseInt(actualStock);
+    if (isNaN(stock) || stock < 0) {
+      Taro.showToast({ title: '请输入有效数量', icon: 'none' });
+      return;
+    }
+
+    updateStock(matchedProduct.id, stock);
+    Taro.showToast({ title: '盘点成功', icon: 'success' });
+    setShowScanModal(false);
   };
 
   const handleProductClick = (productId: string) => {
@@ -79,17 +114,14 @@ const InventoryPage: React.FC = () => {
   };
 
   const handleLossProfit = () => {
-    console.log('[Inventory] 报损报溢');
     Taro.navigateTo({ url: '/pages/loss-profit/index' });
   };
 
   const handleLowStockSetting = () => {
-    console.log('[Inventory] 低库存设置');
     Taro.navigateTo({ url: '/pages/low-stock-setting/index' });
   };
 
   const handleReplenishment = () => {
-    console.log('[Inventory] 补货申请');
     Taro.navigateTo({ url: '/pages/replenishment/index' });
   };
 
@@ -105,6 +137,8 @@ const InventoryPage: React.FC = () => {
     return '库存充足';
   };
 
+  const quickBarcodes = products.slice(0, 4).map(p => p.barcode);
+
   return (
     <View className={styles.page}>
       {/* 搜索栏 */}
@@ -112,7 +146,6 @@ const InventoryPage: React.FC = () => {
         <View className={styles.searchInput}>
           <Text className={styles.searchIcon}>🔍</Text>
           <Input
-            className={styles.searchText}
             placeholder="搜索商品名称/条码"
             value={searchText}
             onInput={e => setSearchText(e.detail.value)}
@@ -213,6 +246,96 @@ const InventoryPage: React.FC = () => {
           ))
         )}
       </ScrollView>
+
+      {/* 扫码弹窗 */}
+      <Modal
+        isOpen={showScanModal}
+        onClose={() => setShowScanModal(false)}
+        className={styles.scanModal}
+      >
+        <View className={styles.scanModalContent}>
+          <View className={styles.scanModalHeader}>
+            <Text className={styles.scanModalTitle}>扫码盘点</Text>
+            <View className={styles.scanModalClose} onClick={() => setShowScanModal(false)}>
+              <Text>✕</Text>
+            </View>
+          </View>
+
+          <View className={styles.scanInputWrap}>
+            <Text className={styles.scanLabel}>商品条码</Text>
+            <Input
+              className={styles.scanInput}
+              placeholder="输入或扫描商品条码"
+              value={scanBarcode}
+              onInput={e => handleBarcodeInput(e.detail.value)}
+              type="number"
+            />
+          </View>
+
+          <View className={styles.quickBarcodes}>
+            <Text className={styles.quickLabel}>快速选择：</Text>
+            {quickBarcodes.map(code => (
+              <View
+                key={code}
+                className={styles.quickBarcodeTag}
+                onClick={() => handleQuickScan(code)}
+              >
+                <Text>{code.slice(-4)}</Text>
+              </View>
+            ))}
+          </View>
+
+          {matchedProduct ? (
+            <View className={styles.matchedProduct}>
+              <Image
+                className={styles.matchedImg}
+                src={matchedProduct.image}
+                mode="aspectFill"
+              />
+              <View className={styles.matchedInfo}>
+                <Text className={styles.matchedName}>{matchedProduct.name}</Text>
+                <Text className={styles.matchedCategory}>{matchedProduct.category}</Text>
+                <Text className={styles.currentStock}>
+                  当前库存：{matchedProduct.stock}{matchedProduct.unit}
+                </Text>
+              </View>
+            </View>
+          ) : scanBarcode ? (
+            <View className={styles.noMatch}>
+              <Text>未找到匹配的商品</Text>
+            </View>
+          ) : null}
+
+          {matchedProduct && (
+            <View className={styles.stockInputWrap}>
+              <Text className={styles.scanLabel}>实盘数量</Text>
+              <Input
+                className={styles.stockInput}
+                type="number"
+                value={actualStock}
+                onInput={e => setActualStock(e.detail.value)}
+                placeholder="请输入实际库存数量"
+              />
+              <Text className={styles.stockUnit}>{matchedProduct.unit}</Text>
+            </View>
+          )}
+
+          <View className={styles.scanModalBtns}>
+            <View
+              className={classnames(styles.scanBtnOutline, styles.cancelBtn)}
+              onClick={() => setShowScanModal(false)}
+            >
+              <Text>取消</Text>
+            </View>
+            <View
+              className={classnames(styles.scanBtnPrimary, !matchedProduct && styles.disabled)}
+              onClick={handleSaveStock}
+            >
+              <Text>保存盘点</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* 底部操作栏 */}
       <View className={styles.bottomBar}>

@@ -1,0 +1,244 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.taskHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $page-padding;
+  padding-bottom: 60rpx;
+  color: $color-text-white;
+}
+
+.taskTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.taskDesc {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+  display: block;
+  line-height: 1.5;
+  margin-bottom: $spacing-lg;
+}
+
+.taskMeta {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.metaItem {
+  font-size: $font-size-xs;
+  opacity: 0.9;
+}
+
+.taskProgressCard {
+  margin: -40rpx $page-padding $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  z-index: 2;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.progressLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.progressValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.progressBar {
+  width: 100%;
+  height: 16rpx;
+  background: $color-bg-page;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: 8rpx;
+  transition: width $transition-base ease-out;
+}
+
+.taskStatusTag {
+  display: inline-block;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+
+  &.pending {
+    color: $color-warning;
+    background: $color-warning-bg;
+  }
+
+  &.in_progress {
+    color: $color-primary;
+    background: $color-primary-bg;
+  }
+
+  &.completed {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+}
+
+.checklistSection {
+  padding: 0 $page-padding $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.checklist {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.checkItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+  transition: background $transition-base;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: $radius-sm;
+  border: 2rpx solid $color-border;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+  margin-right: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &.checked {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-text-white;
+    font-size: $font-size-sm;
+  }
+}
+
+.checkItemContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkItemName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  display: block;
+  line-height: 1.5;
+
+  &.completed {
+    color: $color-text-tertiary;
+    text-decoration: line-through;
+  }
+}
+
+.checkItemDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* 底部操作栏 */
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.btnOutline {
+  flex: 1;
+  height: 88rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  border: 2rpx solid $color-border;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.btnPrimary {
+  flex: 1;
+  height: 88rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}

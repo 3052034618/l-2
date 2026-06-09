@@ -300,3 +300,252 @@
   margin-right: $spacing-sm;
   font-size: 36rpx;
 }
+
+/* 记录弹窗 */
+.recordModal {
+  width: 92%;
+  max-width: 650rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  overflow: hidden;
+}
+
+.recordModalContent {
+  padding: $spacing-lg;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.recordModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.recordModalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.recordModalClose {
+  width: 48rpx;
+  height: 48rpx;
+  @include flex-center;
+  color: $color-text-tertiary;
+  font-size: $font-size-md;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.uploadSection,
+.shelfSelectSection,
+.statusSection,
+.remarkSection {
+  margin-bottom: $spacing-lg;
+}
+
+.uploadLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.imageItem {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.imagePreview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageRemove {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  @include flex-center;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  z-index: 1;
+}
+
+.imageAdd {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  background: $color-bg-page;
+  border: 2rpx dashed $color-border;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.imageAddIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  font-size: 48rpx;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xs;
+}
+
+.imageAddText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.shelfSelectList {
+  display: flex;
+  gap: $spacing-sm;
+  white-space: nowrap;
+
+  @include scroll-x-container;
+}
+
+.shelfSelectItem {
+  @include scroll-x-item(auto);
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    border-color: $color-primary;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.statusOptions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.statusOption {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.normalActive {
+    background: $color-success-bg;
+    color: $color-success;
+    border-color: $color-success;
+  }
+
+  &.abnormalActive {
+    background: $color-error-bg;
+    color: $color-error;
+    border-color: $color-error;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.remarkInput {
+  width: 100%;
+  min-height: 120rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+.recordModalBtns {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-xl;
+}
+
+.scanBtnOutline {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  border: 2rpx solid $color-border;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.cancelBtn {
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.scanBtnPrimary {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
+
+  &:active {
+    opacity: 0.9;
+  }
+}

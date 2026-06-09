@@ -3,39 +3,542 @@
 .page {
   min-height: 100vh;
   background: $color-bg-page;
-  padding: $spacing-xl $page-padding;
+  padding-bottom: 160rpx;
+}
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $color-bg-card;
+  display: flex;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-lg 0;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  position: relative;
+  transition: all $transition-base;
+
+  &.active {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60rpx;
+      height: 6rpx;
+      background: $color-primary;
+      border-radius: 3rpx;
+    }
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.recordList {
+  padding: $spacing-md $page-padding;
+}
+
+.recordCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.recordHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.recordType {
+  display: flex;
+  align-items: center;
+}
+
+.recordTypeIcon {
+  width: 56rpx;
+  height: 56rpx;
   @include flex-center;
-  flex-direction: column;
+  border-radius: $radius-sm;
+  font-size: 28rpx;
+  margin-right: $spacing-sm;
+
+  &.loss {
+    background: $color-error-bg;
+    color: $color-error;
+  }
+
+  &.profit {
+    background: $color-success-bg;
+    color: $color-success;
+  }
 }
 
-.icon {
-  font-size: 160rpx;
-  margin-bottom: $spacing-lg;
-}
-
-.title {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
+.recordTypeText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
   color: $color-text-primary;
+}
+
+.recordQty {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &.loss {
+    color: $color-error;
+  }
+
+  &.profit {
+    color: $color-success;
+  }
+}
+
+.recordProduct {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-top: 1rpx solid $color-divider;
+  border-bottom: 1rpx solid $color-divider;
   margin-bottom: $spacing-sm;
 }
 
-.desc {
-  font-size: $font-size-sm;
-  color: $color-text-tertiary;
-  text-align: center;
-  line-height: 1.6;
+.recordProductImg {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  background: $color-bg-page;
 }
 
-.backBtn {
-  margin-top: $spacing-xl;
-  padding: $spacing-sm $spacing-xl;
-  background: $color-primary;
-  color: $color-text-white;
-  border-radius: $radius-button;
+.recordProductInfo {
+  flex: 1;
+  margin-left: $spacing-sm;
+  min-width: 0;
+}
+
+.recordProductName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.recordProductSku {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.recordReason {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  display: block;
+}
+
+/* 登记表单 */
+.formPage {
+  padding: $spacing-md $page-padding;
+}
+
+.typeSelector {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
   font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.typeOptions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.typeOption {
+  flex: 1;
+  height: 120rpx;
+  @include flex-center;
+  flex-direction: column;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.lossActive {
+    background: $color-error-bg;
+    border-color: $color-error;
+  }
+
+  &.profitActive {
+    background: $color-success-bg;
+    border-color: $color-success;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.typeOptionIcon {
+  font-size: 48rpx;
+  margin-bottom: 4rpx;
+}
+
+.typeOptionText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  &.lossActive {
+    color: $color-error;
+    font-weight: $font-weight-medium;
+  }
+
+  &.profitActive {
+    color: $color-success;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.productSelector {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.productPicker {
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-primary-bg;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.productPickerImg {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+}
+
+.productPickerInfo {
+  flex: 1;
+  margin-left: $spacing-sm;
+  min-width: 0;
+}
+
+.productPickerName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.productPickerStock {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.productPickerArrow {
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+.qtyInputSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.qtyInputRow {
+  display: flex;
+  align-items: center;
+}
+
+.qtyLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.qtyInputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-left: $spacing-md;
+}
+
+.qtyInput {
+  flex: 1;
+  height: 72rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: 0 $spacing-md;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+.qtyUnit {
+  margin-left: $spacing-sm;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.reasonSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.reasonTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.reasonTag {
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    border-color: $color-primary;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.reasonInput {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+/* 商品选择弹窗 */
+.productModal {
+  width: 92%;
+  max-width: 650rpx;
+  max-height: 70vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  overflow: hidden;
+}
+
+.productModalHeader {
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.productModalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.productModalClose {
+  color: $color-text-tertiary;
+  font-size: $font-size-md;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.productSearch {
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.searchInput {
+  width: 100%;
+  height: 64rpx;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.productList {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.productItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.productItemImg {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.productItemInfo {
+  flex: 1;
+  margin-left: $spacing-sm;
+  min-width: 0;
+}
+
+.productItemName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.productItemStock {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.submitBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.submitBtn {
+  width: 100%;
+  height: 88rpx;
+  @include flex-center;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
 
   &:active {
     opacity: 0.9;
   }
+
+  &.disabled {
+    background: $color-bg-disabled;
+    color: $color-text-disabled;
+    box-shadow: none;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
 }

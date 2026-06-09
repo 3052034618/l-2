@@ -3,39 +3,354 @@
 .page {
   min-height: 100vh;
   background: $color-bg-page;
-  padding: $spacing-xl $page-padding;
-  @include flex-center;
-  flex-direction: column;
+  padding-bottom: 120rpx;
 }
 
-.icon {
-  font-size: 160rpx;
-  margin-bottom: $spacing-lg;
+/* 商品头部 */
+.productHeader {
+  background: $color-bg-card;
+  padding: $spacing-lg $page-padding;
+  display: flex;
+  align-items: center;
 }
 
-.title {
-  font-size: $font-size-xl;
+.productImg {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.productInfo {
+  flex: 1;
+  margin-left: $spacing-lg;
+  min-width: 0;
+}
+
+.productName {
+  font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+  display: block;
+  line-height: 1.4;
   margin-bottom: $spacing-sm;
 }
 
-.desc {
-  font-size: $font-size-sm;
-  color: $color-text-tertiary;
-  text-align: center;
-  line-height: 1.6;
+.productPrice {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-error;
+  display: block;
+  margin-bottom: $spacing-xs;
+
+  .unit {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-normal;
+    color: $color-text-secondary;
+    margin-left: 4rpx;
+  }
 }
 
-.backBtn {
-  margin-top: $spacing-xl;
-  padding: $spacing-sm $spacing-xl;
-  background: $color-primary;
-  color: $color-text-white;
-  border-radius: $radius-button;
+.productBarcode {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  display: block;
+}
+
+/* 库存卡片 */
+.stockCard {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.stockTitle {
   font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.stockRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.stockLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.stockValue {
+  flex: 1;
+  text-align: right;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.stockStatus {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+
+  &.normal {
+    color: $color-success;
+  }
+
+  &.low {
+    color: $color-warning;
+  }
+
+  &.out {
+    color: $color-error;
+  }
+}
+
+/* 图表卡片 */
+.chartCard {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.chartTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.chartTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.chartTab {
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary-bg;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.chartContainer {
+  width: 100%;
+  height: 360rpx;
+  position: relative;
+  margin-top: $spacing-md;
+}
+
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 280rpx;
+  padding-bottom: 60rpx;
+  border-bottom: 2rpx solid $color-divider;
+  position: relative;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  position: relative;
+}
+
+.bar {
+  width: 36rpx;
+  background: linear-gradient(180deg, $color-primary-light 0%, $color-primary 100%);
+  border-radius: 4rpx 4rpx 0 0;
+  position: relative;
+  min-height: 4rpx;
+  transition: height $transition-base ease-out;
+}
+
+.barValue {
+  position: absolute;
+  top: -36rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  white-space: nowrap;
+}
+
+.barLabel {
+  position: absolute;
+  bottom: -48rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  white-space: nowrap;
+}
+
+/* 库存变化记录 */
+.recordCard {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.recordTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.recordItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+  }
+}
+
+.recordType {
+  width: 56rpx;
+  height: 56rpx;
+  @include flex-center;
+  border-radius: $radius-sm;
+  font-size: 24rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-sm;
+
+  &.loss {
+    background: $color-error-bg;
+    color: $color-error;
+  }
+
+  &.profit {
+    background: $color-success-bg;
+    color: $color-success;
+  }
+}
+
+.recordInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.recordReason {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: block;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.recordQty {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+
+  &.loss {
+    color: $color-error;
+  }
+
+  &.profit {
+    color: $color-success;
+  }
+}
+
+/* 底部操作栏 */
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: $spacing-md;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.btnOutline {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  border: 2rpx solid $color-border;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.btnPrimary {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
 
   &:active {
     opacity: 0.9;
   }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
 }

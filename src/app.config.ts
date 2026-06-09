@@ -9,7 +9,8 @@ export default defineAppConfig({
     'pages/replenishment/index',
     'pages/inspection-record/index',
     'pages/low-stock-setting/index',
-    'pages/loss-profit/index'
+    'pages/loss-profit/index',
+    'pages/task-detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',

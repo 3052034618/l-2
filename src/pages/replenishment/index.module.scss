@@ -3,39 +3,332 @@
 .page {
   min-height: 100vh;
   background: $color-bg-page;
-  padding: $spacing-xl $page-padding;
-  @include flex-center;
-  flex-direction: column;
+  padding-bottom: 160rpx;
 }
 
-.icon {
-  font-size: 160rpx;
-  margin-bottom: $spacing-lg;
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: $color-bg-card;
+  display: flex;
+  border-bottom: 1rpx solid $color-divider;
 }
 
-.title {
-  font-size: $font-size-xl;
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-lg 0;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  position: relative;
+  transition: all $transition-base;
+
+  &.active {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60rpx;
+      height: 6rpx;
+      background: $color-primary;
+      border-radius: 3rpx;
+    }
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.orderList {
+  padding: $spacing-md $page-padding;
+}
+
+.orderCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.orderId {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.orderStatus {
+  font-size: $font-size-xs;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+
+  &.pending {
+    color: $color-warning;
+    background: $color-warning-bg;
+  }
+
+  &.approved {
+    color: $color-success;
+    background: $color-success-bg;
+  }
+
+  &.rejected {
+    color: $color-error;
+    background: $color-error-bg;
+  }
+
+  &.completed {
+    color: $color-primary;
+    background: $color-primary-bg;
+  }
+}
+
+.orderItems {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-xs 0;
+
+  &:not(:last-child) {
+    border-bottom: 1rpx solid $color-divider;
+    padding-bottom: $spacing-sm;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.orderItemName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.orderItemQty {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-md;
+}
+
+.orderFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.orderTotal {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+}
+
+/* 新建申请 */
+.createForm {
+  padding: $spacing-md $page-padding;
+}
+
+.sectionCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-md;
+  display: block;
 }
 
-.desc {
+.productSelector {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.productSelectorImg {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.productSelectorInfo {
+  flex: 1;
+  margin-left: $spacing-sm;
+  min-width: 0;
+}
+
+.productSelectorName {
   font-size: $font-size-sm;
-  color: $color-text-tertiary;
-  text-align: center;
-  line-height: 1.6;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
 }
 
-.backBtn {
-  margin-top: $spacing-xl;
-  padding: $spacing-sm $spacing-xl;
-  background: $color-primary;
-  color: $color-text-white;
-  border-radius: $radius-button;
+.productSelectorPrice {
+  font-size: $font-size-xs;
+  color: $color-error;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.qtyControl {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.qtyBtn {
+  width: 56rpx;
+  height: 56rpx;
+  @include flex-center;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  font-size: $font-size-lg;
+  color: $color-text-secondary;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+
+  &.disabled {
+    color: $color-text-disabled;
+  }
+}
+
+.qtyValue {
+  width: 80rpx;
+  text-align: center;
   font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.remarkSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.remarkInput {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+.summaryBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.summaryInfo {
+  flex: 1;
+}
+
+.summaryLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: block;
+}
+
+.summaryValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-error;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.submitBtn {
+  width: 240rpx;
+  height: 88rpx;
+  @include flex-center;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
 
   &:active {
     opacity: 0.9;
   }
+
+  &.disabled {
+    background: $color-bg-disabled;
+    color: $color-text-disabled;
+    box-shadow: none;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
 }

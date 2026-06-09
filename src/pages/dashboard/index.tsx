@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import Taro, { useDidShow, usePullDownRefresh } from '@tarojs/taro';
 import classnames from 'classnames';
@@ -9,13 +9,16 @@ import SectionHeader from '@/components/SectionHeader';
 import {
   dashboardData,
   quickActions,
-  outOfStockProducts,
-  nearExpiryProducts,
   salesTrendData
 } from '@/data/dashboard';
+import { useInventoryStore } from '@/store/inventory';
+import { useTasksStore } from '@/store/tasks';
 import { formatDate } from '@/utils';
 
 const DashboardPage: React.FC = () => {
+  const { products } = useInventoryStore();
+  const { getPendingCount } = useTasksStore();
+
   const [refreshing, setRefreshing] = useState(false);
 
   const handleRefresh = useCallback(() => {
@@ -32,6 +35,16 @@ const DashboardPage: React.FC = () => {
   useDidShow(() => {
     console.log('[Dashboard] 页面显示');
   });
+
+  const outOfStockProducts = useMemo(() => {
+    return products.filter(p => p.stock <= 0);
+  }, [products]);
+
+  const nearExpiryProducts = useMemo(() => {
+    return products.filter(p => p.expireDate);
+  }, [products]);
+
+  const pendingTaskCount = getPendingCount();
 
   const handleActionClick = (page: string) => {
     console.log('[Dashboard] 点击快捷功能:', page);
@@ -91,7 +104,7 @@ const DashboardPage: React.FC = () => {
         />
         <StatCard
           title="待办任务"
-          value={dashboardData.pendingTasks}
+          value={pendingTaskCount}
           unit="项"
           color="warning"
           onClick={() => Taro.switchTab({ url: '/pages/tasks/index' })}
@@ -124,7 +137,7 @@ const DashboardPage: React.FC = () => {
         <View className={styles.sectionHeader}>
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <Text className={styles.sectionTitle}>缺货商品</Text>
-            <View className={styles.badge}>{dashboardData.outOfStockCount}</View>
+            <View className={styles.badge}>{outOfStockProducts.length}</View>
           </View>
           <Text className={styles.sectionMore} onClick={() => handleMoreClick('outOfStock')}>
             查看更多 ›
@@ -148,7 +161,7 @@ const DashboardPage: React.FC = () => {
           <View style={{ display: 'flex', alignItems: 'center' }}>
             <Text className={styles.sectionTitle}>临期商品</Text>
             <View className={classnames(styles.badge, styles.warningBadge)}>
-              {dashboardData.nearExpiryCount}
+              {nearExpiryProducts.length}
             </View>
           </View>
           <Text className={styles.sectionMore} onClick={() => handleMoreClick('nearExpiry')}>

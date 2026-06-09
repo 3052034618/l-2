@@ -306,3 +306,228 @@
     opacity: 0.8;
   }
 }
+
+/* 扫码弹窗 */
+.scanModal {
+  width: 90%;
+  max-width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  overflow: hidden;
+}
+
+.scanModalContent {
+  padding: $spacing-lg;
+}
+
+.scanModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.scanModalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.scanModalClose {
+  width: 48rpx;
+  height: 48rpx;
+  @include flex-center;
+  color: $color-text-tertiary;
+  font-size: $font-size-md;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.scanInputWrap {
+  margin-bottom: $spacing-md;
+}
+
+.scanLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.scanInput {
+  width: 100%;
+  height: 80rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+.quickBarcodes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.quickLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.quickBarcodeTag {
+  padding: 8rpx 20rpx;
+  background: $color-primary-bg;
+  color: $color-primary;
+  font-size: $font-size-xs;
+  border-radius: $radius-xs;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.matchedProduct {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+}
+
+.matchedImg {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-card;
+}
+
+.matchedInfo {
+  flex: 1;
+  margin-left: $spacing-md;
+  min-width: 0;
+}
+
+.matchedName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.matchedCategory {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.currentStock {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+.noMatch {
+  padding: $spacing-lg;
+  text-align: center;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.stockInputWrap {
+  position: relative;
+  margin-bottom: $spacing-xl;
+}
+
+.stockInput {
+  width: 100%;
+  height: 88rpx;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-lg;
+  padding-right: 80rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $color-primary;
+    background: $color-bg-card;
+  }
+}
+
+.stockUnit {
+  position: absolute;
+  right: $spacing-lg;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.scanModalBtns {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.scanBtnOutline {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  border: 2rpx solid $color-border;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.cancelBtn {
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.scanBtnPrimary {
+  flex: 1;
+  height: 80rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
+
+  &:active {
+    opacity: 0.9;
+  }
+
+  &.disabled {
+    background: $color-bg-disabled;
+    color: $color-text-disabled;
+    box-shadow: none;
+  }
+}
