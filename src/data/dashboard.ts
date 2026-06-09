@@ -17,7 +17,8 @@ export const quickActions: QuickAction[] = [
   { id: '1', name: '扫码盘点', icon: 'scan', color: '#165dff', page: '/pages/inventory/index' },
   { id: '2', name: '补货申请', icon: 'cart', color: '#00b42a', page: '/pages/replenishment/index' },
   { id: '3', name: '陈列检查', icon: 'camera', color: '#ff7d00', page: '/pages/display/index' },
-  { id: '4', name: '报损报溢', icon: 'report', color: '#722ed1', page: '/pages/loss-profit/index' }
+  { id: '4', name: '报损报溢', icon: 'report', color: '#722ed1', page: '/pages/loss-profit/index' },
+  { id: '5', name: '巡店日报', icon: 'doc', color: '#14c9c9', page: '/pages/inspection-record/index' }
 ];
 
 export const outOfStockProducts: Product[] = [

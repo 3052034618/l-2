@@ -28,13 +28,14 @@ export interface StoreData {
 export interface Task {
   id: string;
   title: string;
-  type: 'promotion' | 'inspection' | 'training' | 'other';
+  type: 'promotion' | 'inspection' | 'training' | 'rectification' | 'other';
   description: string;
   deadline: string;
   status: 'pending' | 'in_progress' | 'completed';
   progress?: number;
   items?: TaskItem[];
   createTime: string;
+  relatedRecordId?: string;
 }
 
 export interface TaskItem {
@@ -45,9 +46,14 @@ export interface TaskItem {
 
 export interface DisplayRecord {
   id: string;
+  shelfId: string;
   shelfName: string;
   images: string[];
   status: 'normal' | 'abnormal';
+  rectificationStatus?: 'pending' | 'completed';
+  rectificationImages?: string[];
+  rectificationRemark?: string;
+  rectificationTime?: string;
   remark?: string;
   createTime: string;
 }

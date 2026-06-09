@@ -1,39 +1,169 @@
-@use '@/styles/variables.scss' as *;
+@import '@/styles/variables.scss';
 
 .page {
   min-height: 100vh;
   background: $color-bg-page;
+  padding-bottom: 0;
+}
+
+/* 头部 */
+.header {
   padding: $spacing-xl $page-padding;
-  @include flex-center;
-  flex-direction: column;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
 }
 
-.icon {
-  font-size: 160rpx;
-  margin-bottom: $spacing-lg;
-}
-
-.title {
+.headerTitle {
   font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  display: block;
+}
+
+.headerDesc {
+  font-size: $font-size-sm;
+  opacity: 0.85;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+/* 卡片 */
+.sectionCard {
+  margin: $spacing-md $page-padding 0;
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.cardIcon {
+  font-size: $font-size-lg;
+  margin-right: $spacing-sm;
+}
+
+.cardTitle {
+  font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
-  margin-bottom: $spacing-sm;
 }
 
-.desc {
-  font-size: $font-size-sm;
-  color: $color-text-tertiary;
+/* 统计网格 */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.statItem {
   text-align: center;
-  line-height: 1.6;
+  padding: $spacing-sm 0;
+  background: $color-bg-page;
+  border-radius: $radius-md;
 }
 
-.backBtn {
-  margin-top: $spacing-xl;
-  padding: $spacing-sm $spacing-xl;
-  background: $color-primary;
-  color: $color-text-white;
+.statNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  display: block;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+  display: block;
+}
+
+/* 次级统计 */
+.subStats {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx dashed $color-divider;
+  display: flex;
+  justify-content: space-around;
+}
+
+.subStat {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+/* 日报预览 */
+.reportPreview {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.reportText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+}
+
+/* 底部操作栏 */
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  display: flex;
+  gap: $spacing-sm;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.btnOutline {
+  flex: 1;
+  height: 88rpx;
+  @include flex-center;
   border-radius: $radius-button;
   font-size: $font-size-md;
+  border: 2rpx solid $color-border;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.btnSecondary {
+  flex: 1;
+  height: 88rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  background: $color-primary-bg;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.btnPrimary {
+  flex: 1.2;
+  height: 88rpx;
+  @include flex-center;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 4rpx 16rpx rgba(22, 93, 255, 0.3);
 
   &:active {
     opacity: 0.9;

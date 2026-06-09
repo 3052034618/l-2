@@ -12,6 +12,7 @@ export const shelfList = [
 export const displayRecords: DisplayRecord[] = [
   {
     id: '1',
+    shelfId: '1',
     shelfName: '饮料区A面',
     images: [
       'https://picsum.photos/id/326/400/300',
@@ -23,16 +24,19 @@ export const displayRecords: DisplayRecord[] = [
   },
   {
     id: '2',
+    shelfId: '4',
     shelfName: '零食区B面',
     images: [
       'https://picsum.photos/id/312/400/300'
     ],
     status: 'abnormal',
     remark: '部分商品缺货，需补货',
+    rectificationStatus: 'pending',
     createTime: '2026-06-10 08:45:00'
   },
   {
     id: '3',
+    shelfId: '6',
     shelfName: '方便食品区',
     images: [
       'https://picsum.photos/id/292/400/300',

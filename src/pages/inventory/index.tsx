@@ -86,17 +86,21 @@ const InventoryPage: React.FC = () => {
           setShowScanModal(true);
         } else {
           Taro.showModal({
-            title: '扫码结果',
+            title: '未找到商品',
             content: `条码 ${barcode} 未找到匹配商品`,
             showCancel: true,
-            cancelText: '手动输入',
-            confirmText: '知道了',
+            cancelText: '重新扫码',
+            confirmText: '手动录入',
             success: (modalRes) => {
-              if (modalRes.cancel) {
+              if (modalRes.confirm) {
+                // 手动录入
                 setScanBarcode(barcode);
                 setMatchedProduct(null);
                 setActualStock('');
                 setShowScanModal(true);
+              } else if (modalRes.cancel) {
+                // 重新扫码
+                handleScan();
               }
             }
           });
@@ -104,12 +108,8 @@ const InventoryPage: React.FC = () => {
       },
       fail: (err) => {
         console.log('[Inventory] 扫码失败:', err);
-        // 扫码失败时降级到手动输入
-        Taro.showToast({ title: '扫码取消或失败', icon: 'none' });
-        setShowScanModal(true);
-        setScanBarcode('');
-        setMatchedProduct(null);
-        setActualStock('');
+        // 扫码取消或失败，只显示提示，不自动打开手输弹窗
+        Taro.showToast({ title: '已取消扫码', icon: 'none' });
       }
     });
   };

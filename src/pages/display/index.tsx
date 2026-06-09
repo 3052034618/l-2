@@ -7,7 +7,7 @@ import { useDisplayStore } from '@/store/display';
 import SectionHeader from '@/components/SectionHeader';
 
 const DisplayPage: React.FC = () => {
-  const { shelves, records, addRecord, updateShelfStatus } = useDisplayStore();
+  const { shelves, records, addRecord, updateShelfStatus, submitRectification } = useDisplayStore();
 
   const [refreshing, setRefreshing] = useState(false);
   const [checkedItems, setCheckedItems] = useState<string[]>(['1', '2', '3']);
@@ -17,6 +17,11 @@ const DisplayPage: React.FC = () => {
   const [selectedShelf, setSelectedShelf] = useState('');
   const [recordRemark, setRecordRemark] = useState('');
   const [recordStatus, setRecordStatus] = useState<'normal' | 'abnormal'>('normal');
+
+  const [showRectifyModal, setShowRectifyModal] = useState(false);
+  const [rectifyRecordId, setRectifyRecordId] = useState('');
+  const [rectifyImages, setRectifyImages] = useState<string[]>([]);
+  const [rectifyRemark, setRectifyRemark] = useState('');
 
   usePullDownRefresh(() => {
     setRefreshing(true);
@@ -84,6 +89,7 @@ const DisplayPage: React.FC = () => {
     if (!shelf) return;
 
     addRecord({
+      shelfId: selectedShelf,
       shelfName: shelf.name,
       images: selectedImages,
       status: recordStatus,
@@ -119,6 +125,48 @@ const DisplayPage: React.FC = () => {
       abnormal: '异常'
     };
     return map[status] || status;
+  };
+
+  const handleRectifyClick = (recordId: string) => {
+    setRectifyRecordId(recordId);
+    setRectifyImages([]);
+    setRectifyRemark('');
+    setShowRectifyModal(true);
+  };
+
+  const handleRectifyChooseImage = () => {
+    Taro.chooseImage({
+      count: 9 - rectifyImages.length,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        setRectifyImages([...rectifyImages, ...res.tempFilePaths]);
+      },
+      fail: () => {
+        const mockImages = [
+          `https://picsum.photos/id/${400 + Math.floor(Math.random() * 100)}/400/300`,
+          `https://picsum.photos/id/${500 + Math.floor(Math.random() * 100)}/400/300`
+        ];
+        setRectifyImages([...rectifyImages, ...mockImages]);
+      }
+    });
+  };
+
+  const removeRectifyImage = (index: number) => {
+    const newImages = [...rectifyImages];
+    newImages.splice(index, 1);
+    setRectifyImages(newImages);
+  };
+
+  const handleSubmitRectification = () => {
+    if (rectifyImages.length === 0) {
+      Taro.showToast({ title: '请上传整改照片', icon: 'none' });
+      return;
+    }
+
+    submitRectification(rectifyRecordId, rectifyImages, rectifyRemark);
+    Taro.showToast({ title: '整改已提交', icon: 'success' });
+    setShowRectifyModal(false);
   };
 
   return (
@@ -214,13 +262,27 @@ const DisplayPage: React.FC = () => {
             <View key={record.id} className={styles.recordCard}>
               <View className={styles.recordHeader}>
                 <Text className={styles.recordShelf}>{record.shelfName}</Text>
-                <View
-                  className={classnames(
-                    styles.recordStatusBadge,
-                    styles[record.status]
+                <View style={{ display: 'flex', alignItems: 'center', gap: '16rpx' }}>
+                  <View
+                    className={classnames(
+                      styles.recordStatusBadge,
+                      styles[record.status]
+                    )}
+                  >
+                    <Text>{record.status === 'normal' ? '正常' : '异常'}</Text>
+                  </View>
+                  {record.status === 'abnormal' && record.rectificationStatus && (
+                    <View
+                      className={classnames(
+                        styles.rectifyBadge,
+                        styles[`rect_${record.rectificationStatus}`]
+                      )}
+                    >
+                      <Text>
+                        {record.rectificationStatus === 'pending' ? '待整改' : '已整改'}
+                      </Text>
+                    </View>
                   )}
-                >
-                  <Text>{record.status === 'normal' ? '正常' : '异常'}</Text>
                 </View>
               </View>
               <ScrollView className={styles.recordImages} scrollX>
@@ -236,9 +298,39 @@ const DisplayPage: React.FC = () => {
               {record.remark && (
                 <Text className={styles.recordRemark}>{record.remark}</Text>
               )}
-              <Text style={{ fontSize: '22rpx', color: '#86909c', marginTop: '16rpx' }}>
-                {record.createTime}
-              </Text>
+              {record.rectificationImages && record.rectificationImages.length > 0 && (
+                <View className={styles.rectifySection}>
+                  <Text className={styles.rectifyLabel}>整改照片</Text>
+                  <ScrollView className={styles.recordImages} scrollX>
+                    {record.rectificationImages.map((img, idx) => (
+                      <Image
+                        key={idx}
+                        className={styles.recordImg}
+                        src={img}
+                        mode="aspectFill"
+                      />
+                    ))}
+                  </ScrollView>
+                  {record.rectificationRemark && (
+                    <Text className={styles.rectifyRemark}>
+                      整改说明：{record.rectificationRemark}
+                    </Text>
+                  )}
+                </View>
+              )}
+              <View className={styles.recordFooter}>
+                <Text style={{ fontSize: '22rpx', color: '#86909c' }}>
+                  {record.createTime}
+                </Text>
+                {record.status === 'abnormal' && record.rectificationStatus === 'pending' && (
+                  <View
+                    className={styles.rectifyBtn}
+                    onClick={() => handleRectifyClick(record.id)}
+                  >
+                    <Text>去整改</Text>
+                  </View>
+                )}
+              </View>
             </View>
           ))}
         </View>
@@ -366,6 +458,77 @@ const DisplayPage: React.FC = () => {
           </View>
         </View>
       </Modal>
+
+      {/* 整改弹窗 */}
+      {showRectifyModal && (
+        <View className={styles.modalOverlay} onClick={() => setShowRectifyModal(false)}>
+          <View className={styles.rectifyModal} onClick={e => e.stopPropagation()}>
+            <View className={styles.rectifyModalHeader}>
+              <Text className={styles.rectifyModalTitle}>提交整改</Text>
+              <View
+                className={styles.rectifyModalClose}
+                onClick={() => setShowRectifyModal(false)}
+              >
+                <Text>✕</Text>
+              </View>
+            </View>
+
+            <View className={styles.rectifyModalBody}>
+              {/* 整改照片 */}
+              <View className={styles.uploadSection}>
+                <Text className={styles.uploadLabel}>整改照片</Text>
+                <View className={styles.imageGrid}>
+                  {rectifyImages.map((img, idx) => (
+                    <View key={idx} className={styles.imageItem}>
+                      <Image
+                        className={styles.imagePreview}
+                        src={img}
+                        mode="aspectFill"
+                      />
+                      <View
+                        className={styles.imageRemove}
+                        onClick={() => removeRectifyImage(idx)}
+                      >
+                        <Text>✕</Text>
+                      </View>
+                    </View>
+                  ))}
+                  {rectifyImages.length < 9 && (
+                    <View className={styles.imageAdd} onClick={handleRectifyChooseImage}>
+                      <Text className={styles.imageAddIcon}>➕</Text>
+                      <Text className={styles.imageAddText}>添加照片</Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              {/* 整改说明 */}
+              <View className={styles.remarkSection}>
+                <Text className={styles.uploadLabel}>整改说明</Text>
+                <Input
+                  className={styles.remarkInput}
+                  placeholder="请描述整改情况..."
+                  value={rectifyRemark}
+                  onInput={e => setRectifyRemark(e.detail.value)}
+                  maxlength={200}
+                />
+              </View>
+            </View>
+
+            <View className={styles.rectifyModalBtns}>
+              <View
+                className={styles.cancelBtn}
+                onClick={() => setShowRectifyModal(false)}
+              >
+                <Text>取消</Text>
+              </View>
+              <View className={styles.submitBtn} onClick={handleSubmitRectification}>
+                <Text>提交整改</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </ScrollView>
   );
 };

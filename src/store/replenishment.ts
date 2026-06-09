@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import { loadPersistState, savePersistState } from '@/utils/persist';
+import { useInventoryStore } from './inventory';
 
 const PERSIST_KEY = 'replenishment_store';
 
@@ -10,6 +11,7 @@ export interface ReplenishmentItem {
   quantity: number;
   unit: string;
   price: number;
+  receivedQty?: number;
 }
 
 export interface ReplenishmentOrder {
@@ -18,8 +20,9 @@ export interface ReplenishmentOrder {
   totalQuantity: number;
   totalAmount: number;
   remark: string;
-  status: 'pending' | 'approved' | 'rejected' | 'completed';
+  status: 'pending' | 'approved' | 'in_transit' | 'completed' | 'rejected';
   createTime: string;
+  receiveTime?: string;
 }
 
 interface ReplenishmentState {
@@ -28,6 +31,7 @@ interface ReplenishmentState {
 
   createOrder: (items: ReplenishmentItem[], remark: string) => void;
   getOrderById: (id: string) => ReplenishmentOrder | undefined;
+  confirmReceive: (orderId: string, receivedItems: { productId: string; receivedQty: number }[]) => void;
   _persist: () => void;
 }
 
@@ -41,7 +45,7 @@ const defaultOrders: ReplenishmentOrder[] = [
     totalQuantity: 80,
     totalAmount: 235,
     remark: '周末促销备货',
-    status: 'pending',
+    status: 'approved',
     createTime: '2026-06-09 14:30:00'
   },
   {
@@ -52,8 +56,9 @@ const defaultOrders: ReplenishmentOrder[] = [
     totalQuantity: 20,
     totalAmount: 170,
     remark: '补货',
-    status: 'approved',
-    createTime: '2026-06-08 10:00:00'
+    status: 'completed',
+    createTime: '2026-06-08 10:00:00',
+    receiveTime: '2026-06-09 16:30:00'
   }
 ];
 
@@ -88,6 +93,48 @@ export const useReplenishmentStore = create<ReplenishmentState>((set, get) => ({
 
   getOrderById: (id) => {
     return get().orders.find(o => o.id === id);
+  },
+
+  confirmReceive: (orderId, receivedItems) => {
+    console.log('[ReplenishmentStore] 确认到货:', orderId, receivedItems);
+    const order = get().orders.find(o => o.id === orderId);
+    if (!order) return;
+
+    const inventoryStore = useInventoryStore.getState();
+
+    const newItems = order.items.map(item => {
+      const received = receivedItems.find(r => r.productId === item.productId);
+      const receivedQty = received ? received.receivedQty : item.quantity;
+      return { ...item, receivedQty };
+    });
+
+    newItems.forEach(item => {
+      const qty = item.receivedQty || item.quantity;
+      inventoryStore.addStockRecord({
+        productId: item.productId,
+        productName: item.productName,
+        type: 'profit',
+        quantity: qty,
+        reason: '补货到货'
+      });
+    });
+
+    const totalReceived = newItems.reduce((sum, item) => sum + (item.receivedQty || 0), 0);
+
+    set(state => ({
+      orders: state.orders.map(o =>
+        o.id === orderId
+          ? {
+              ...o,
+              items: newItems,
+              status: 'completed',
+              receiveTime: new Date().toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-'),
+              totalQuantity: totalReceived
+            }
+          : o
+      )
+    }));
+    get()._persist();
   },
 
   _persist: () => {

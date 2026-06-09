@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import classnames from 'classnames';
@@ -7,16 +7,18 @@ import { useTasksStore } from '@/store/tasks';
 
 const TaskDetailPage: React.FC = () => {
   const router = useRouter();
-  const { getTaskById, toggleTaskItem } = useTasksStore();
-
   const taskId = router.params.id || '';
-  const task = useMemo(() => getTaskById(taskId), [taskId, getTaskById]);
+
+  const task = useTasksStore(state =>
+    state.tasks.find(t => t.id === taskId)
+  );
+  const toggleTaskItem = useTasksStore(state => state.toggleTaskItem);
 
   useEffect(() => {
     if (task) {
       Taro.setNavigationBarTitle({ title: task.title });
     }
-  }, [task]);
+  }, [task?.title, task?.id]);
 
   const handleToggle = (itemId: string) => {
     if (!taskId) return;
