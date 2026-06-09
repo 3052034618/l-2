@@ -85,34 +85,37 @@ export const taskList: Task[] = [
 export const messages = [
   {
     id: '1',
-    type: 'system',
-    title: '系统通知',
-    content: '您有新的促销任务待处理，请及时查看。',
+    type: 'task',
+    title: '新任务：夏季饮料促销活动',
+    content: '总部下发了夏季饮料促销活动任务，请及时查看并完成。',
     time: '2026-06-10 09:00:00',
-    read: false
+    read: false,
+    taskId: '1'
   },
   {
     id: '2',
-    type: 'alert',
-    title: '库存预警',
-    content: '共有12种商品库存不足，请及时补货。',
+    type: 'task',
+    title: '新任务：端午节日商品陈列',
+    content: '端午节前完成粽子、咸鸭蛋等节日商品的陈列和备货工作。',
     time: '2026-06-10 08:30:00',
-    read: false
+    read: false,
+    taskId: '2'
   },
   {
     id: '3',
-    type: 'system',
-    title: '临期提醒',
-    content: '有8种商品临期，请关注销售情况。',
+    type: 'alert',
+    title: '库存预警',
+    content: '共有12种商品库存不足，请及时补货。',
     time: '2026-06-10 08:00:00',
     read: true
   },
   {
     id: '4',
     type: 'task',
-    title: '任务更新',
-    content: '"夏季饮料促销活动"已更新，请查看最新要求。',
+    title: '任务更新：消防安全检查',
+    content: '消防安全检查任务已更新检查项，请查看最新要求。',
     time: '2026-06-09 17:30:00',
-    read: true
+    read: true,
+    taskId: '5'
   }
 ];

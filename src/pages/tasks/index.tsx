@@ -49,8 +49,18 @@ const TasksPage: React.FC = () => {
 
   const handleMessageClick = (msgId: string) => {
     console.log('[Tasks] 点击消息:', msgId);
+    const msg = messages.find(m => m.id === msgId);
+    if (!msg) return;
+
     markMessageRead(msgId);
-    Taro.showToast({ title: '已读', icon: 'none' });
+
+    if (msg.taskId) {
+      Taro.navigateTo({
+        url: `/pages/task-detail/index?id=${msg.taskId}`
+      });
+    } else {
+      Taro.showToast({ title: '消息详情', icon: 'none' });
+    }
   };
 
   const getTypeEmoji = (type: string) => {

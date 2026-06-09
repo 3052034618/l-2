@@ -1,6 +1,10 @@
 import { create } from 'zustand';
+import { useEffect } from 'react';
 import { DisplayRecord } from '@/types';
 import { shelfList, displayRecords, checkItems } from '@/data/display';
+import { loadPersistState, savePersistState } from '@/utils/persist';
+
+const PERSIST_KEY = 'display_store';
 
 interface DisplayState {
   shelves: {
@@ -12,15 +16,22 @@ interface DisplayState {
   }[];
   records: DisplayRecord[];
   checkItems: { id: string; name: string; required: boolean }[];
+  _initialized: boolean;
 
   addRecord: (record: Omit<DisplayRecord, 'id' | 'createTime'>) => void;
   updateShelfStatus: (shelfId: string, status: 'checked' | 'abnormal') => void;
+  _persist: () => void;
 }
 
-export const useDisplayStore = create<DisplayState>((set) => ({
+const defaultState = {
   shelves: shelfList,
   records: displayRecords,
   checkItems: checkItems,
+  _initialized: false
+};
+
+export const useDisplayStore = create<DisplayState>((set, get) => ({
+  ...defaultState,
 
   addRecord: (record) => {
     console.log('[DisplayStore] 添加陈列记录:', record);
@@ -33,6 +44,7 @@ export const useDisplayStore = create<DisplayState>((set) => ({
     set(state => ({
       records: [newRecord, ...state.records]
     }));
+    get()._persist();
   },
 
   updateShelfStatus: (shelfId, status) => {
@@ -48,5 +60,31 @@ export const useDisplayStore = create<DisplayState>((set) => ({
           : s
       )
     }));
+    get()._persist();
+  },
+
+  _persist: () => {
+    const { shelves, records } = get();
+    savePersistState(PERSIST_KEY, { shelves, records });
   }
 }));
+
+export function useDisplayInit() {
+  useEffect(() => {
+    const stored = loadPersistState<{
+      shelves: typeof shelfList;
+      records: DisplayRecord[];
+    } | null>(PERSIST_KEY, null);
+
+    if (stored) {
+      console.log('[DisplayStore] 从本地存储恢复数据');
+      useDisplayStore.setState({
+        shelves: stored.shelves,
+        records: stored.records,
+        _initialized: true
+      });
+    } else {
+      useDisplayStore.setState({ _initialized: true });
+    }
+  }, []);
+}

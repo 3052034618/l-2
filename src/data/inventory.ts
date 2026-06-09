@@ -220,9 +220,10 @@ export const lowStockSettings = {
   notifyEnabled: true,
   notifyTime: '09:00',
   categories: [
-    { id: '1', name: '饮料', minStock: 30 },
-    { id: '2', name: '方便食品', minStock: 20 },
-    { id: '3', name: '休闲零食', minStock: 15 },
-    { id: '4', name: '乳制品', minStock: 25 }
+    { id: '1', name: '饮料', minStock: 30, icon: '🥤', bgColor: '#e8f3ff' },
+    { id: '2', name: '方便食品', minStock: 20, icon: '🍜', bgColor: '#fff7e8' },
+    { id: '3', name: '休闲零食', minStock: 15, icon: '🍪', bgColor: '#f0e8ff' },
+    { id: '4', name: '乳制品', minStock: 25, icon: '🥛', bgColor: '#e8fff0' },
+    { id: '5', name: '烘焙食品', minStock: 10, icon: '🍞', bgColor: '#fff0e8' }
   ]
 };

@@ -70,11 +70,48 @@ const InventoryPage: React.FC = () => {
   });
 
   const handleScan = () => {
-    console.log('[Inventory] 打开扫码');
-    setShowScanModal(true);
-    setScanBarcode('');
-    setMatchedProduct(null);
-    setActualStock('');
+    console.log('[Inventory] 调用扫码');
+    Taro.scanCode({
+      onlyFromCamera: false,
+      scanType: ['barCode', 'qrCode'],
+      success: (res) => {
+        console.log('[Inventory] 扫码成功:', res.result);
+        const barcode = res.result;
+        const product = products.find(p => p.barcode === barcode);
+
+        if (product) {
+          setScanBarcode(barcode);
+          setMatchedProduct(product);
+          setActualStock(String(product.stock));
+          setShowScanModal(true);
+        } else {
+          Taro.showModal({
+            title: '扫码结果',
+            content: `条码 ${barcode} 未找到匹配商品`,
+            showCancel: true,
+            cancelText: '手动输入',
+            confirmText: '知道了',
+            success: (modalRes) => {
+              if (modalRes.cancel) {
+                setScanBarcode(barcode);
+                setMatchedProduct(null);
+                setActualStock('');
+                setShowScanModal(true);
+              }
+            }
+          });
+        }
+      },
+      fail: (err) => {
+        console.log('[Inventory] 扫码失败:', err);
+        // 扫码失败时降级到手动输入
+        Taro.showToast({ title: '扫码取消或失败', icon: 'none' });
+        setShowScanModal(true);
+        setScanBarcode('');
+        setMatchedProduct(null);
+        setActualStock('');
+      }
+    });
   };
 
   const handleBarcodeInput = (value: string) => {

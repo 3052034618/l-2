@@ -1,6 +1,10 @@
 import { create } from 'zustand';
+import { useEffect } from 'react';
 import { Product, StockRecord, SalesTrend } from '@/types';
 import { inventoryList, stockRecords, salesTrend, lowStockSettings } from '@/data/inventory';
+import { loadPersistState, savePersistState } from '@/utils/persist';
+
+const PERSIST_KEY = 'inventory_store';
 
 interface InventoryState {
   products: Product[];
@@ -12,6 +16,7 @@ interface InventoryState {
     categories: { id: string; name: string; minStock: number }[];
   };
   salesTrend: SalesTrend[];
+  _initialized: boolean;
 
   updateStock: (productId: string, actualStock: number) => void;
   addStockRecord: (record: Omit<StockRecord, 'id' | 'createTime'>) => void;
@@ -20,13 +25,19 @@ interface InventoryState {
   updateNotifySetting: (enabled: boolean, time: string) => void;
   getProductById: (id: string) => Product | undefined;
   getStats: () => { total: number; low: number; out: number; near: number };
+  _persist: () => void;
 }
 
-export const useInventoryStore = create<InventoryState>((set, get) => ({
+const defaultState = {
   products: inventoryList,
   stockRecords: stockRecords,
   lowStockSettings: lowStockSettings,
   salesTrend: salesTrend,
+  _initialized: false
+};
+
+export const useInventoryStore = create<InventoryState>((set, get) => ({
+  ...defaultState,
 
   updateStock: (productId, actualStock) => {
     console.log('[InventoryStore] 更新库存:', productId, actualStock);
@@ -57,6 +68,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
 
       return { products: newProducts };
     });
+    get()._persist();
   },
 
   addStockRecord: (record) => {
@@ -84,6 +96,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         products: newProducts
       };
     });
+    get()._persist();
   },
 
   updateMinStock: (categoryId, minStock) => {
@@ -99,6 +112,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         p.categoryId === categoryId ? { ...p, minStock } : p
       )
     }));
+    get()._persist();
   },
 
   updateDefaultMinStock: (minStock) => {
@@ -109,6 +123,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         defaultMinStock: minStock
       }
     }));
+    get()._persist();
   },
 
   updateNotifySetting: (enabled, time) => {
@@ -120,6 +135,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
         notifyTime: time
       }
     }));
+    get()._persist();
   },
 
   getProductById: (id) => {
@@ -133,5 +149,32 @@ export const useInventoryStore = create<InventoryState>((set, get) => ({
     const out = products.filter(p => p.stock <= 0).length;
     const near = products.filter(p => p.expireDate).length;
     return { total, low, out, near };
+  },
+
+  _persist: () => {
+    const { products, stockRecords, lowStockSettings } = get();
+    savePersistState(PERSIST_KEY, { products, stockRecords, lowStockSettings });
   }
 }));
+
+export function useInventoryInit() {
+  useEffect(() => {
+    const stored = loadPersistState<{
+      products: Product[];
+      stockRecords: StockRecord[];
+      lowStockSettings: typeof lowStockSettings;
+    } | null>(PERSIST_KEY, null);
+
+    if (stored) {
+      console.log('[InventoryStore] 从本地存储恢复数据');
+      useInventoryStore.setState({
+        products: stored.products,
+        stockRecords: stored.stockRecords,
+        lowStockSettings: stored.lowStockSettings,
+        _initialized: true
+      });
+    } else {
+      useInventoryStore.setState({ _initialized: true });
+    }
+  }, []);
+}

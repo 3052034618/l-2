@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import { useInventoryStore } from '@/store/inventory';
-import { lowStockSettings } from '@/data/inventory';
+import { lowStockSettings as defaultSettings } from '@/data/inventory';
 
 interface CategorySetting {
   categoryId: string;
@@ -16,21 +16,19 @@ interface CategorySetting {
 }
 
 const LowStockSettingPage: React.FC = () => {
-  const { updateMinStock, products } = useInventoryStore();
+  const { updateMinStock, products, lowStockSettings } = useInventoryStore();
 
   const [settings, setSettings] = useState<CategorySetting[]>(() =>
-    lowStockSettings.map(item => {
-      const categoryProducts = products.filter(p => p.categoryId === item.categoryId);
-      const avgMinStock = categoryProducts.length > 0
-        ? Math.round(categoryProducts.reduce((sum, p) => sum + p.minStock, 0) / categoryProducts.length)
-        : item.minStock;
+    defaultSettings.categories.map(item => {
+      const storedCategory = lowStockSettings.categories.find(c => c.id === item.id);
+      const minStock = storedCategory ? storedCategory.minStock : item.minStock;
 
       return {
-        categoryId: item.categoryId,
-        categoryName: item.categoryName,
-        icon: item.icon,
+        categoryId: item.id,
+        categoryName: item.name,
+        icon: item.icon || '📦',
         bgColor: item.bgColor || '#e8f3ff',
-        minStock: avgMinStock,
+        minStock,
         notifyEnabled: true
       };
     })
