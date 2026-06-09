@@ -189,25 +189,58 @@ const TasksPage: React.FC = () => {
               <Text className={styles.emptyText}>暂无消息</Text>
             </View>
           ) : (
-            messages.map(msg => (
-              <View
-                key={msg.id}
-                className={classnames(
-                  styles.messageCard,
-                  !msg.read && styles.unread
-                )}
-                onClick={() => handleMessageClick(msg.id)}
-              >
-                <View className={classnames(styles.messageIcon, styles[msg.type])}>
-                  <Text>{getTypeEmoji(msg.type)}</Text>
+            messages.map(msg => {
+              const relatedTask = msg.taskId
+                ? tasks.find(t => t.id === msg.taskId)
+                : null;
+
+              return (
+                <View
+                  key={msg.id}
+                  className={classnames(
+                    styles.messageCard,
+                    !msg.read && styles.unread
+                  )}
+                  onClick={() => handleMessageClick(msg.id)}
+                >
+                  <View className={classnames(styles.messageIcon, styles[msg.type])}>
+                    <Text>{getTypeEmoji(msg.type)}</Text>
+                  </View>
+                  <View className={styles.messageContent}>
+                    <View className={styles.messageHeader}>
+                      <Text className={styles.messageTitle}>{msg.title}</Text>
+                      {relatedTask && (
+                        <View
+                          className={classnames(
+                            styles.msgTaskStatus,
+                            styles[relatedTask.status]
+                          )}
+                        >
+                          <Text>{getTaskStatusText(relatedTask.status)}</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text className={styles.messageText}>{msg.content}</Text>
+                    <View className={styles.messageFooter}>
+                      <Text className={styles.messageTime}>{msg.time}</Text>
+                      {relatedTask && relatedTask.progress !== undefined && (
+                        <View className={styles.msgProgressWrap}>
+                          <View className={styles.msgProgressBar}>
+                            <View
+                              className={styles.msgProgressFill}
+                              style={{ width: `${relatedTask.progress}%` }}
+                            />
+                          </View>
+                          <Text className={styles.msgProgressText}>
+                            {relatedTask.progress}%
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </View>
                 </View>
-                <View className={styles.messageContent}>
-                  <Text className={styles.messageTitle}>{msg.title}</Text>
-                  <Text className={styles.messageText}>{msg.content}</Text>
-                  <Text className={styles.messageTime}>{msg.time}</Text>
-                </View>
-              </View>
-            ))
+              );
+            })
           )}
         </ScrollView>
       )}

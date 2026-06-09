@@ -308,3 +308,69 @@
   font-size: $font-size-md;
   color: $color-text-tertiary;
 }
+
+/* 消息-任务关联 */
+.messageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.msgTaskStatus {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+
+  &.pending {
+    background: $color-warning-bg;
+    color: $color-warning;
+  }
+
+  &.in_progress {
+    background: $color-primary-bg;
+    color: $color-primary;
+  }
+
+  &.completed {
+    background: $color-success-bg;
+    color: $color-success;
+  }
+}
+
+.messageFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-sm;
+}
+
+.msgProgressWrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+.msgProgressBar {
+  width: 120rpx;
+  height: 8rpx;
+  background: $color-bg-page;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.msgProgressFill {
+  height: 100%;
+  background: $color-primary;
+  border-radius: 4rpx;
+  transition: width $transition-base;
+}
+
+.msgProgressText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-left: $spacing-xs;
+  flex-shrink: 0;
+}

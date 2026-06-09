@@ -8,7 +8,7 @@
 
 /* 头部 */
 .header {
-  padding: $spacing-xl $page-padding;
+  padding: $spacing-xl $page-padding $spacing-lg;
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
   color: $color-text-white;
 }
@@ -19,11 +19,48 @@
   display: block;
 }
 
-.headerDesc {
-  font-size: $font-size-sm;
-  opacity: 0.85;
+.storeInfo {
   margin-top: $spacing-xs;
-  display: block;
+}
+
+.storeName {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+/* 日期选择器 */
+.dateSelector {
+  margin-top: $spacing-md;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-xs;
+}
+
+.dateArrow {
+  width: 64rpx;
+  height: 64rpx;
+  @include flex-center;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  border-radius: $radius-md;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.dateDisplay {
+  flex: 1;
+  text-align: center;
+}
+
+.dateText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-white;
 }
 
 /* 卡片 */
@@ -92,6 +129,82 @@
 .subStat {
   font-size: $font-size-sm;
   color: $color-text-secondary;
+}
+
+/* 异常追踪区 */
+.trackSection {
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.trackLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.trackList {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.trackItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.trackItemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.trackItemTitle {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: block;
+  @include text-ellipsis;
+}
+
+.trackItemSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.trackItemArrow {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+/* 空状态 */
+.emptyTrack {
+  padding: $spacing-lg 0;
+  text-align: center;
+}
+
+.emptyTrackText {
+  font-size: $font-size-sm;
+  color: $color-success;
 }
 
 /* 日报预览 */

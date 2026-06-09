@@ -104,19 +104,21 @@ export const useReplenishmentStore = create<ReplenishmentState>((set, get) => ({
 
     const newItems = order.items.map(item => {
       const received = receivedItems.find(r => r.productId === item.productId);
-      const receivedQty = received ? received.receivedQty : item.quantity;
+      const receivedQty = received ? received.receivedQty : 0;
       return { ...item, receivedQty };
     });
 
+    // 只对实际到货数量 > 0 的商品增加库存
     newItems.forEach(item => {
-      const qty = item.receivedQty || item.quantity;
-      inventoryStore.addStockRecord({
-        productId: item.productId,
-        productName: item.productName,
-        type: 'profit',
-        quantity: qty,
-        reason: '补货到货'
-      });
+      if (item.receivedQty && item.receivedQty > 0) {
+        inventoryStore.addStockRecord({
+          productId: item.productId,
+          productName: item.productName,
+          type: 'profit',
+          quantity: item.receivedQty,
+          reason: '补货到货'
+        });
+      }
     });
 
     const totalReceived = newItems.reduce((sum, item) => sum + (item.receivedQty || 0), 0);
